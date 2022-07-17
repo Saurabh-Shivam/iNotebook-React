@@ -51,7 +51,7 @@ router.post(
           id: user.id,
         },
       };
-      // here we don't need to await bcz sign() is synchronous method, we will directly get the data
+      // here we don't need to await bcz sign() is synchronous function, we will directly get the data
       const authToken = jwt.sign(data, JWT_SECRET);
       // console.log(authToken);
       res.json({ authToken }); // bcz we are using ES^we dont have to write res.json({authToken: authToken})
@@ -62,7 +62,56 @@ router.post(
     } catch (error) {
       // For now using this but ideally we will have to send this to Logger or SQS
       console.error(error.message);
-      res.send(500).send("Some error occured");
+      res.send(500).send("Internal Server Error");
+    }
+  }
+);
+
+// Authenticate a User using POST "/api/auth/login". No login required
+router.post(
+  "/login",
+  // Adding a validation layer
+  [
+    body("email", "Enter a valid email").isEmail(),
+    body("password", "Password cannot be blank").exists(),
+  ],
+  async (req, res) => {
+    // If there are errors, return Bad request and the errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // destructuring to get email and password from req.body
+    const { email, password } = req.body;
+
+    try {
+      let user = await User.findOne({ email });
+      if (!user) {
+        return res
+          .status(400)
+          .json({ error: "Please try to login with correct credentials" });
+      }
+
+      // here we add await bcz compare() is an asyncronous function
+      const passwordCompare = await bcrypt.compare(password, user.password);
+      if (!passwordCompare) {
+        return res
+          .status(400)
+          .json({ error: "Please try to login with correct credentials" });
+      }
+
+      // data here is the user's data which we will send
+      const data = {
+        user: {
+          id: user.id,
+        },
+      };
+      const authToken = jwt.sign(data, JWT_SECRET);
+      res.json({ authToken });
+    } catch (error) {
+      console.error(error.message);
+      res.send(500).send("Internal Server Error");
     }
   }
 );
