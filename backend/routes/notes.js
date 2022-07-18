@@ -78,7 +78,6 @@ router.put(
       }
 
       // Find te note to be updated and update it
-
       // Checking to avoid being hacked or doing invalid things
       let note = await Note.findById(req.params.id);
       if (!note) {
@@ -104,6 +103,7 @@ router.put(
     }
   }
 );
+
 // ROUTE 4: Delete an existing Note using: DELETE "/api/notes/deletenote". Login required
 router.delete("/deletenote/:id", fetchuser, async (req, res) => {
   try {
