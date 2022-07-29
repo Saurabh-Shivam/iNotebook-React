@@ -88,29 +88,32 @@ const NoteState = (props) => {
     setNotes(notes.concat(note));
   };
 
-  // // Add a Note
-  // const addNote = (title, description, tag) => {
-  //   // TODO: API Call
-  //   console.log("Adding a new note");
-  //   const note = {
-  //     _id: "61322f119553781a8ca8d0e08",
-  //     user: "62d37268d3104aacef1c99ea",
-  //     title: title,
-  //     description: description,
-  //     tag: tag,
-  //     date: "2022-07-28T12:37:01.398Z",
-  //     __v: 0,
-  //   };
-  //   setNotes(notes.concat(note));
-  // };
-
   // Delete a Note
 
-  const deleteNote = (id) => {};
+  const deleteNote = (id) => {
+    // TODO: API Call
+    console.log("Deleteing note with id" + id);
+    const newNotes = notes.filter((note) => {
+      return note._id !== id;
+    });
+    setNotes(newNotes);
+  };
 
   // Edit a Note
 
-  const editNote = (id) => {};
+  const editNote = (id, title, description, tag) => {
+    // API Call
+
+    // Logic to edit in client
+    for (let index = 0; index < notes.length; index++) {
+      const element = notes[index];
+      if (element._id === id) {
+        element.title = title;
+        element.description = description;
+        element.tag = tag;
+      }
+    }
+  };
 
   return (
     // <noteContext.Provider value={{ state: "state", update: "update" }}>
