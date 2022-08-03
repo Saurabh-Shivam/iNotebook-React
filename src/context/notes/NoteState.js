@@ -8,7 +8,7 @@ const NoteState = (props) => {
 
   // Get all Notes
   const getNotes = async () => {
-    console.log("Adding a new note");
+    // console.log("Adding a new note");
 
     // API Call
     const response = await fetch(`${host}/api/notes/fetchallnotes`, {
@@ -20,13 +20,13 @@ const NoteState = (props) => {
       },
     });
     const json = await response.json();
-    console.log(json);
+    // console.log(json);
     setNotes(json);
   };
 
   // Add a Note
   const addNote = async (title, description, tag) => {
-    console.log("Adding a new note");
+    // console.log("Adding a new note");
 
     // API Call
     const response = await fetch(`${host}/api/notes/addnote`, {
@@ -39,20 +39,23 @@ const NoteState = (props) => {
       body: JSON.stringify({ title, description, tag }),
     });
 
-    const json = response.json(); //response.json will parse the data
-    console.log(json);
+    const note = await response.json(); //response.json will parse the data
+    setNotes(notes.concat(note)); // NOTE:-> concat returns an array whereas push updates an array
 
-    const note = {
-      _id: "62e282ed18t11b859g0aac40ecded",
-      user: "62d37268d3104aacef1c99ea",
-      title: title,
-      description: description,
-      tag: tag,
-      date: "2022-07-28T12:37:01.398Z",
-      __v: 0,
-    };
-    // NOTE:-> concat returns an array whereas push updates an array
-    setNotes(notes.concat(note));
+    // const json = response.json(); //response.json will parse the data
+    // console.log(json);
+
+    // const note = {
+    //   _id: "62e282ed18t11b859g0aac40ecded",
+    //   user: "62d37268d3104aacef1c99ea",
+    //   title: title,
+    //   description: description,
+    //   tag: tag,
+    //   date: "2022-07-28T12:37:01.398Z",
+    //   __v: 0,
+    // };
+    // // NOTE:-> concat returns an array whereas push updates an array
+    // setNotes(notes.concat(note));
   };
 
   // Delete a Note
@@ -67,9 +70,9 @@ const NoteState = (props) => {
       },
     });
     const json = response.json(); //response.json will parse the data
-    console.log(json);
+    // console.log(json);
 
-    console.log("Deleteing note with id" + id);
+    // console.log("Deleteing note with id" + id);
     const newNotes = notes.filter((note) => {
       return note._id !== id;
     });
@@ -89,7 +92,7 @@ const NoteState = (props) => {
       body: JSON.stringify({ title, description, tag }),
     });
     const json = await response.json(); //response.json will parse the data
-    console.log(json);
+    // console.log(json);
 
     // Bcz in react we cannot directly change the state so here we have create a newNotes variable
     let newNotes = JSON.parse(JSON.stringify(notes)); // doing JSON.parse will create a deep copy of newNotes

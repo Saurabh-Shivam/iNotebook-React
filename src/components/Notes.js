@@ -36,7 +36,7 @@ const Notes = () => {
   };
 
   const handleClick = (e) => {
-    console.log("Updating the note...", note);
+    // console.log("Updating the note...", note);
     editNote(note.id, note.etitle, note.edescription, note.etag); // Called from NoteState.js file using react useContext
     refClose.current.click();
   };
@@ -92,6 +92,8 @@ const Notes = () => {
                     value={note.etitle}
                     aria-describedby="emailHelp"
                     onChange={onChange}
+                    minLength={3}
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -105,6 +107,7 @@ const Notes = () => {
                     name="edescription"
                     value={note.edescription}
                     onChange={onChange}
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -118,6 +121,7 @@ const Notes = () => {
                     name="etag"
                     value={note.etag}
                     onChange={onChange}
+                    required
                   />
                 </div>
               </form>
@@ -132,6 +136,9 @@ const Notes = () => {
                 Close
               </button>
               <button
+                disabled={
+                  note.etitle.length < 3 || note.edescription.length < 5
+                }
                 onClick={handleClick}
                 type="button"
                 className="btn btn-primary"
@@ -146,7 +153,9 @@ const Notes = () => {
       <div className="row my-3">
         <h2>You Notes</h2>
         {/* Whenever we have nothing to write in the else block we use && operator */}
-        {notes.length === 0 && "No notes to display"}
+        <div className="container mx-2">
+          {notes.length === 0 && "No notes to display"}
+        </div>
         {notes.map((note) => {
           return (
             <NoteItem key={note._id} updateNote={updateNote} note={note} />
