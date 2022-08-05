@@ -10,7 +10,8 @@ const NoteState = (props) => {
   const getNotes = async () => {
     // console.log("Adding a new note");
 
-    // API Call
+    // API Call, instead of doing this create a config file and add the urls there and import from the config file or create an environment variable
+    // NOTE;-> ALWAYS TRY NOT TO HARDCODE THE URLS LIKE THIS
     const response = await fetch(`${host}/api/notes/fetchallnotes`, {
       method: "GET",
       headers: {

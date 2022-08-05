@@ -77,6 +77,7 @@ router.post(
     body("password", "Password cannot be blank").exists(),
   ],
   async (req, res) => {
+    let success = true; // This will check whether our login was successful or a failure
     // If there are errors, return Bad request and the errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -89,6 +90,7 @@ router.post(
     try {
       let user = await User.findOne({ email });
       if (!user) {
+        success = false;
         return res
           .status(400)
           .json({ error: "Please try to login with correct credentials" });
@@ -97,9 +99,11 @@ router.post(
       // here we add await bcz compare() is an asyncronous function
       const passwordCompare = await bcrypt.compare(password, user.password);
       if (!passwordCompare) {
-        return res
-          .status(400)
-          .json({ error: "Please try to login with correct credentials" });
+        success = false;
+        return res.status(400).json({
+          success,
+          error: "Please try to login with correct credentials",
+        });
       }
 
       // data here is the user's data which we will send
@@ -109,7 +113,7 @@ router.post(
         },
       };
       const authToken = jwt.sign(data, JWT_SECRET);
-      res.json({ authToken });
+      res.json({ success, authToken });
     } catch (error) {
       console.error(error.message);
       res.send(500).send("Internal Server Error");
