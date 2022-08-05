@@ -17,6 +17,7 @@ const NoteItem = (props) => {
               onClick={() => {
                 // we have used arrow function here bcz we are passing an arguement
                 deleteNote(note._id);
+                props.showAlert("\tDeleted Successfully", "success");
               }}
             ></i>
             <i

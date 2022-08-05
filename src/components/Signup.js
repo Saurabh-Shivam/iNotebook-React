@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Signup = () => {
+const Signup = (props) => {
   const [credentials, setCredentials] = useState({
     name: "",
     email: "",
@@ -32,8 +32,9 @@ const Signup = () => {
       // Save the auth token and redirect
       localStorage.setItem("token", json.authtoken);
       navigate("/");
+      props.showAlert("\tAccount Created Successfully", "success");
     } else {
-      alert("Invalid Credentials");
+      props.showAlert("\tInvalid Details", "danger");
     }
   };
 
@@ -55,6 +56,7 @@ const Signup = () => {
             name="name"
             aria-describedby="emailHelp"
             placeholder="Enter Name"
+            required
           />
         </div>
         <div className="form-group">
@@ -67,6 +69,7 @@ const Signup = () => {
             name="email"
             aria-describedby="emailHelp"
             placeholder="Enter email"
+            required
           />
           <small id="emailHelp" className="form-text text-muted">
             We'll never share your email with anyone else.

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import noteContext from "../context/notes/noteContext";
 
-const AddNote = () => {
+const AddNote = (props) => {
   const context = useContext(noteContext);
   const { addNote } = context;
 
@@ -17,6 +17,7 @@ const AddNote = () => {
     addNote(note.title, note.description, note.tag);
     // After clicking the button Add Note, all the textfields will become empty again
     setNote({ title: "", description: "", tag: "" });
+    props.showAlert("\tNote Added Successfully", "success");
   };
 
   const onChange = (e) => {
